@@ -6,7 +6,6 @@ import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
-import br.balladesh.icommerce.security.entity.User
 import io.jsonwebtoken.ExpiredJwtException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -43,7 +42,7 @@ class TokenHelper(
 
   fun refreshToken(token: String): Optional<String> {
     try {
-      val claims = this.getAllClaimsFromToken(token)
+      val claims = this.getAllClaimsFromToken(token, true)
       if (!claims.isPresent) return Optional.empty()
 
       claims.get().issuedAt = Date()
@@ -75,8 +74,6 @@ class TokenHelper(
   }
 
   fun validateToken(token: String, userDetails: UserDetails): Boolean {
-    val user = userDetails as User
-
     val username = getUsernameFromToken(token)
     val createdAt = getIssuedAtDateFromToken(token)
 
@@ -94,7 +91,7 @@ class TokenHelper(
     return Optional.empty()
   }
 
-  private fun getAllClaimsFromToken(token: String): Optional<Claims> {
+  private fun getAllClaimsFromToken(token: String, ignoreInvalid: Boolean = false): Optional<Claims> {
     return try {
       Optional.of(
         Jwts.parser()
@@ -102,9 +99,14 @@ class TokenHelper(
           .parseClaimsJws(token)
           .body
       )
-    } catch (e: ExpiredJwtException) {
-      Optional.of(e.claims)
-    } catch (e: Exception) {
+    }
+    catch (e: ExpiredJwtException) {
+      if (ignoreInvalid)
+        return Optional.of(e.claims)
+
+      throw e
+    }
+    catch (e: Exception) {
       Optional.empty()
     }
   }

@@ -84,7 +84,8 @@ class WebSecurityConfiguration(
     web.ignoring().antMatchers(
       HttpMethod.POST,
       "/auth/login",
-      "/auth/signup"
+      "/auth/signup",
+      "/auth/refresh"
     )
     web.ignoring().antMatchers(
       HttpMethod.GET,
