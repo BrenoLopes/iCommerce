@@ -7,6 +7,14 @@ import javax.persistence.*
 @Entity
 @Table(name = "category")
 class Category() : Serializable {
+
+  constructor(id: Long, name: String) : this() {
+    this.id = id
+    this.name = name
+  }
+
+  constructor(name: String) : this(-1, name)
+
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,14 +24,16 @@ class Category() : Serializable {
   var name: String = ""
 
   @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], orphanRemoval = true)
-  var products: Set<Product> = emptySet()
+  var products: MutableSet<Product> = mutableSetOf()
+    private set
 
-  constructor(id: Long, name: String) : this() {
-    this.id = id
-    this.name = name
+  fun addProductBidirectionally(product: Product, shouldSet: Boolean = true) {
+    this.products.add(product)
+
+    if (!shouldSet) return
+
+    product.setCategoryBidirectionally(this, false)
   }
-
-  constructor(name: String) : this(-1, name)
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

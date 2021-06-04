@@ -67,7 +67,7 @@ class User() : UserDetails, Serializable {
     this.enabled = enabled
   }
 
-  override fun getAuthorities(): Collection<GrantedAuthority> = authorities
+  override fun getAuthorities() = authorities
   fun setAuthorities(authorities: MutableSet<Authority>) {
     this.authorities = authorities
   }

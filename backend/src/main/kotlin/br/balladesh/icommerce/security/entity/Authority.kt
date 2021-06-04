@@ -9,6 +9,8 @@ import javax.persistence.*
 @Entity
 @Table(name="authority")
 class Authority() : GrantedAuthority, Serializable {
+  constructor(name: UserRoleName) : this(name, -1)
+
   @Enumerated( EnumType.STRING )
   @Column(name="name")
   private var name: UserRoleName = UserRoleName.ROLE_USER
@@ -22,8 +24,6 @@ class Authority() : GrantedAuthority, Serializable {
     this.name = name
     this.id = id
   }
-
-  constructor(name: UserRoleName) : this(name, -1)
 
   override fun getAuthority(): String {
     return name.name

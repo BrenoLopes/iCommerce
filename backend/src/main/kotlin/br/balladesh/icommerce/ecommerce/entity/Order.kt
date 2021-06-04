@@ -8,12 +8,20 @@ import javax.persistence.*
 @Entity
 @Table(name = "orders")
 class Order() {
+  constructor(id: Long, user: User, totalPrice: BigDecimal, paied: Boolean) : this() {
+    this.id = id
+    this.user = user
+    this.totalPrice = totalPrice
+    this.paied = paied
+  }
+
+  constructor(user: User, totalPrice: BigDecimal, paied: Boolean) : this(-1, user, totalPrice, paied)
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   var id: Long = -1
 
   @ManyToOne
-  //@JoinColumn(name = "client_id", referencedColumnName = "id")
   @JoinColumn(foreignKey = ForeignKey(name = "client_id"), name = "client_id")
   var user: User = User()
 
@@ -24,16 +32,16 @@ class Order() {
   var paied = false
 
   @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
-  var orderedProducts: Set<OrderedProduct> = emptySet()
+  var orderedProducts: MutableSet<OrderedProduct> = mutableSetOf()
+    private set
 
-  constructor(id: Long, user: User, totalPrice: BigDecimal, paied: Boolean) : this() {
-    this.id = id
-    this.user = user
-    this.totalPrice = totalPrice
-    this.paied = paied
+  fun addOrderedProductBidirectionally(orderedProduct: OrderedProduct, shouldSet: Boolean = true) {
+    this.orderedProducts.add(orderedProduct)
+
+    if (!shouldSet) return
+
+    orderedProduct.setOrderBidirectionally(this, false)
   }
-
-  constructor(user: User, totalPrice: BigDecimal, paied: Boolean) : this(-1, user, totalPrice, paied)
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -76,13 +84,22 @@ class OrderedProduct() {
   @ManyToOne
   @JoinColumn(foreignKey = ForeignKey(name = "order_id"), name = "order_id")
   var order = Order()
+    private set
+
+  fun setOrderBidirectionally(order: Order, shouldSet: Boolean = true) {
+    this.order = order
+
+    if (!shouldSet) return
+
+    order.addOrderedProductBidirectionally(this, false)
+  }
 
   constructor(id: Long, name: String, description: String, price: BigDecimal, order: Order) : this() {
     this.id = id
     this.name = name
     this.description = description
     this.price = price
-    this.order = order
+    this.setOrderBidirectionally(order)
   }
 
   constructor(name: String, description: String, price: BigDecimal, order: Order)

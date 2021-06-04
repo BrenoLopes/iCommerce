@@ -33,6 +33,15 @@ class Product() : Serializable
   @ManyToOne
   @JoinColumn(foreignKey = ForeignKey(name = "category_id"), name = "category_id")
   var category: Category = Category()
+    private set
+
+  fun setCategoryBidirectionally(category: Category, shouldSet: Boolean = true) {
+    this.category = category
+
+    if (!shouldSet) return
+
+    category.addProductBidirectionally(this, false)
+  }
 
   @Column(name = "description")
   var description: String = ""
