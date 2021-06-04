@@ -58,8 +58,23 @@ class OrderController(
   }
 
   @GetMapping(value = ["/order"])
+  fun listAllOrdersMadeByClient(user: Principal): ResponseEntity<Any> {
+    return try {
+      val currentUser = this.userService.findByUsername(user.name)
+      val orders = orderRepository.findAllByUser(currentUser)
+
+      ResponseEntity.ok(OrderListResponse(orders.toSet()))
+    } catch (e: Exception) {
+      logger.error("Ocorreu um erro ao listar as ordens", e)
+
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(MessageResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro no servidor!"))
+    }
+  }
+
+  @GetMapping(value = ["/order/all"])
   @PreAuthorize("hasRole('ADMIN')")
-  fun listOrders(): ResponseEntity<Any>  {
+  fun listAllOrders(): ResponseEntity<Any>  {
     return try {
       val orders = orderRepository.findAll()
 
