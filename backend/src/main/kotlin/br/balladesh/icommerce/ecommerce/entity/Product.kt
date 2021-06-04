@@ -2,6 +2,9 @@ package br.balladesh.icommerce.ecommerce.entity
 
 import br.balladesh.icommerce.calculateHashCode
 import br.balladesh.icommerce.security.entity.User
+import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import java.io.Serializable
 import java.math.BigDecimal
 import javax.persistence.*
@@ -75,6 +78,19 @@ class Product() : Serializable
     return calculateHashCode(
       this.name, this.category.id, this.description, this.price, this.vendor.id
     )
+  }
+
+  @JsonValue
+  fun toJson(): ObjectNode {
+    val mapper = ObjectMapper()
+    val node: ObjectNode = mapper.createObjectNode()
+    node.put("id", id)
+      .put("name", name)
+      .put("description", description)
+      .put("price", price)
+      .put("vendor_id", vendor.id)
+      .put("category_id", category.id)
+    return node
   }
 
   companion object {
