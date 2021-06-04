@@ -88,8 +88,9 @@ class Product() : Serializable
       .put("name", name)
       .put("description", description)
       .put("price", price)
-      .put("vendor_id", vendor.id)
+      .put("vendor", vendor.name)
       .put("category_id", category.id)
+      .put("category_name", category.name)
     return node
   }
 
