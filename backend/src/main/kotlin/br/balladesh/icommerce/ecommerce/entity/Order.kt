@@ -2,7 +2,11 @@ package br.balladesh.icommerce.ecommerce.entity
 
 import br.balladesh.icommerce.calculateHashCode
 import br.balladesh.icommerce.security.entity.User
+import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import java.math.BigDecimal
+import java.math.RoundingMode
 import javax.persistence.*
 
 @Entity
@@ -66,6 +70,18 @@ class Order() {
       this.id, this.user.id, this.totalPrice, this.paied, this.orderedProducts
     )
   }
+
+  @JsonValue
+  fun toJson(): ObjectNode {
+    val mapper = ObjectMapper()
+    val node: ObjectNode = mapper.createObjectNode()
+    node.put("id", id)
+      .put("user", user.name)
+      .put("total_price", totalPrice.setScale(2, RoundingMode.CEILING))
+      .put("paied", paied)
+      .putPOJO("ordered_products", orderedProducts)
+    return node
+  }
 }
 
 @Entity
@@ -128,5 +144,17 @@ class OrderedProduct() {
     return calculateHashCode(
       this.id, this.name, this.description, this.price, this.order.id
     )
+  }
+
+  @JsonValue
+  fun toJson(): ObjectNode {
+    val mapper = ObjectMapper()
+    val node: ObjectNode = mapper.createObjectNode()
+    node.put("id", id)
+      .put("name", name)
+      .put("description", description)
+      .put("price", price.setScale(2, RoundingMode.CEILING))
+      .put("order_id", order.id)
+    return node
   }
 }
