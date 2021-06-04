@@ -8,7 +8,7 @@ import java.util.*
 
 interface ProductRepository : CrudRepository<Product, Long> {
   fun findByName(name: String): Optional<Product>
-  fun findAllByCategory(category: Category): List<Product>
-  fun findAllByUser(user: User): List<Product>
-  fun deleteAllByUser(user: User)
+  fun findAllByCategory(category: Category): MutableSet<Product>
+  fun findAllByVendor(vendor: User): MutableSet<Product>
+  fun deleteAllByVendor(vendor: User)
 }

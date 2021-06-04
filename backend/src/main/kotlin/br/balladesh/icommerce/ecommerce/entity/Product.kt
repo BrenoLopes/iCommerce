@@ -8,7 +8,20 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "product")
-class Product() : Serializable {
+class Product() : Serializable
+{
+  constructor(id: Long, name: String, category: Category, description: String, price: BigDecimal, vendor: User) : this() {
+    this.id = id
+    this.name = name
+    this.setCategoryBidirectionally(category)
+    this.description = description
+    this.price = price
+    this.vendor = vendor
+  }
+
+  constructor(name: String, category: Category, description: String, price: BigDecimal, vendor: User)
+    : this(-1, name, category, description, price, vendor)
+
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,17 +42,7 @@ class Product() : Serializable {
 
   @ManyToOne
   @JoinColumn(name = "client_id", referencedColumnName = "id")
-  var user: User = User()
-
-  constructor(id: Long, name: String, category: Category, description: String) : this() {
-    this.id = id
-    this.name = name
-    this.category = category
-    this.description = description
-  }
-
-  constructor(name: String, category: Category, description: String)
-    : this(-1, name, category, description)
+  var vendor: User = User()
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -53,7 +56,7 @@ class Product() : Serializable {
       || this.category.id != other.category.id
       || this.description != other.description
       || this.price != other.price
-      || this.user.id != other.user.id
+      || this.vendor.id != other.vendor.id
     ) return false
 
     return true
@@ -61,7 +64,7 @@ class Product() : Serializable {
 
   override fun hashCode(): Int {
     return calculateHashCode(
-      this.name, this.category.id, this.description, this.price, this.user.id
+      this.name, this.category.id, this.description, this.price, this.vendor.id
     )
   }
 
