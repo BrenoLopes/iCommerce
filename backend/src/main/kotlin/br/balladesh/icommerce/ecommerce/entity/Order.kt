@@ -1,7 +1,6 @@
 package br.balladesh.icommerce.ecommerce.entity
 
 import br.balladesh.icommerce.security.entity.User
-import org.hibernate.annotations.JoinColumnOrFormula
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -50,22 +49,17 @@ class OrderedProduct() {
   var price = BigDecimal(0.0)
 
   @ManyToOne
-  @JoinColumn(name = "category_id", referencedColumnName = "id")
-  var category = Category()
-
-  @ManyToOne
   @JoinColumn(foreignKey = ForeignKey(name = "order_id"), name="order_id")
   var order = Order()
 
-  constructor(id: Long, name: String, description: String, price: BigDecimal, category: Category, order: Order): this() {
+  constructor(id: Long, name: String, description: String, price: BigDecimal, order: Order): this() {
     this.id = id
     this.name = name
     this.description = description
     this.price = price
-    this.category = category
     this.order = order
   }
 
-  constructor(name: String, description: String, price: BigDecimal, category: Category, order: Order)
-    : this(-1, name, description, price, category, order)
+  constructor(name: String, description: String, price: BigDecimal, order: Order)
+    : this(-1, name, description, price, order)
 }
