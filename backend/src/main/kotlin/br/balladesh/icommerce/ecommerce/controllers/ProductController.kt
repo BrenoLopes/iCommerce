@@ -1,5 +1,6 @@
 package br.balladesh.icommerce.ecommerce.controllers
 
+import br.balladesh.icommerce.ecommerce.dto.ProductListResponse
 import br.balladesh.icommerce.ecommerce.dto.ProductSignUpRequest
 import br.balladesh.icommerce.ecommerce.entity.Product
 import br.balladesh.icommerce.ecommerce.repository.CategoryRepository
@@ -13,10 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
@@ -49,6 +47,7 @@ class ProductController(
     } catch (e: DataIntegrityViolationException) {
       val message = String.format("Um produto com o nome %s já existe!", request.name)
       val status = HttpStatus.CONFLICT
+
       return ResponseEntity
         .status(status)
         .body(MessageResponse(status, message))
@@ -60,4 +59,20 @@ class ProductController(
     }
   }
 
+  @GetMapping(value = ["/product"])
+  @PreAuthorize("hasRole('ADMIN')")
+  fun listAllProducts(user: Principal): ResponseEntity<Any> {
+    return try {
+      val currentUser = this.userService.findByUsername(user.name)
+
+      val products = this.productRepository.findAllByVendor(currentUser)
+
+      ResponseEntity.ok(ProductListResponse(products))
+    } catch (e: Exception) {
+      logger.error("Ocorreu um erro ao listar os produtos", e)
+
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(MessageResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro no servidor!"))
+    }
+  }
 }
