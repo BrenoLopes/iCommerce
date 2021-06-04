@@ -1,6 +1,7 @@
 package br.balladesh.icommerce.ecommerce.entity
 
 import br.balladesh.icommerce.calculateHashCode
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.io.Serializable
 import javax.persistence.*
 
@@ -23,6 +24,7 @@ class Category() : Serializable {
   @Column(name = "name", unique = true, length = 100)
   var name: String = ""
 
+  @JsonIgnore
   @OneToMany(mappedBy = "category", orphanRemoval = true)
   var products: MutableSet<Product> = mutableSetOf()
     private set
