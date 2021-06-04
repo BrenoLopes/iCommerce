@@ -9,8 +9,13 @@ data class ProductSignUpRequest(
   val price: BigDecimal
 )
 
+data class OrderRow (
+  val product_id: Long,
+  val quantity: Int
+)
+
 data class PostOrderRequest(
-  val products: Set<Long>
+  val products: Set<OrderRow>
 )
 
 data class PayOrderRequest(

@@ -99,6 +99,8 @@ class OrderedProduct() {
   @Column(name = "unit_price", scale = 15, precision = 4)
   var price = BigDecimal(0.0)
 
+  var quantity: Int = 1
+
   @ManyToOne
   @JoinColumn(foreignKey = ForeignKey(name = "order_id"), name = "order_id")
   var order = Order()
@@ -112,16 +114,17 @@ class OrderedProduct() {
     order.addOrderedProductBidirectionally(this, false)
   }
 
-  constructor(id: Long, name: String, description: String, price: BigDecimal, order: Order) : this() {
+  constructor(id: Long, name: String, description: String, price: BigDecimal, quantity: Int, order: Order) : this() {
     this.id = id
     this.name = name
     this.description = description
     this.price = price
+    this.quantity = quantity
     this.setOrderBidirectionally(order)
   }
 
-  constructor(name: String, description: String, price: BigDecimal, order: Order)
-    : this(-1, name, description, price, order)
+  constructor(name: String, description: String, price: BigDecimal, quantity: Int, order: Order)
+    : this(-1, name, description, price, quantity, order)
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -154,6 +157,7 @@ class OrderedProduct() {
       .put("name", name)
       .put("description", description)
       .put("price", price.setScale(2, RoundingMode.CEILING))
+      .put("quantity", quantity)
       .put("order_id", order.id)
     return node
   }

@@ -33,16 +33,22 @@ class OrderController(
     try {
       val currentUser = this.userService.findByUsername(user.name)
 
-      val products = productRepository.findAllByIdIn(request.products)
-
       var totalPrice = BigDecimal(0.0)
+
+      val productMap = mutableMapOf<Long, Int>()
+      request.products.forEach { productMap[it.product_id] = it.quantity }
+
+      val products = productRepository.findAllByIdIn(productMap.keys)
 
       val order = Order(currentUser, totalPrice, false)
       val orderedProducts: MutableSet<OrderedProduct> = mutableSetOf()
 
-      products.forEach{
-        orderedProducts.add(OrderedProduct(it.name, it.description, it.price, order))
-        totalPrice = totalPrice.add(it.price)
+      products.forEach {
+        val quantity = productMap[it.id] ?: 1
+        val thisPrice = it.price.multiply(quantity.toBigDecimal())
+
+        orderedProducts.add(OrderedProduct(it.name, it.description, thisPrice, quantity, order))
+        totalPrice = totalPrice.add(thisPrice)
       }
 
       order.totalPrice = totalPrice
@@ -76,7 +82,7 @@ class OrderController(
       orderRepository.save(order.get())
 
       ResponseEntity.ok(MessageResponse("O pedido foi pago com sucesso!"))
-    } catch(e: RuntimeException) {
+    } catch (e: RuntimeException) {
       ResponseEntity.badRequest().body(MessageResponse(HttpStatus.BAD_REQUEST, "O pedido não existe!"))
     } catch (e: Exception) {
       logger.error("Ocorreu um erro ao listar as ordens", e)
@@ -103,7 +109,7 @@ class OrderController(
 
   @GetMapping(value = ["/order/all"])
   @PreAuthorize("hasRole('ADMIN')")
-  fun listAllOrders(): ResponseEntity<Any>  {
+  fun listAllOrders(): ResponseEntity<Any> {
     return try {
       val orders = orderRepository.findAll()
 

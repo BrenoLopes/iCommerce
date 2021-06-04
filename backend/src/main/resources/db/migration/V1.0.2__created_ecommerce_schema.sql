@@ -33,6 +33,7 @@ create table ordered_products (
     name varchar(100),
     description varchar(255),
     unit_price decimal(15, 4),
+    quantity int,
     order_id bigint unsigned,
     foreign key (order_id) references orders(id),
     primary key (id)
