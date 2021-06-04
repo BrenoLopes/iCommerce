@@ -1,14 +1,14 @@
 create table category
 (
     id   serial,
-    name varchar(255),
+    name varchar(100) unique,
     primary key (id)
 );
 
 create table product
 (
     id          serial,
-    name        varchar(100),
+    name        varchar(100) unique,
     category_id bigint unsigned,
     description varchar(255),
     price       decimal(15, 4),

@@ -20,7 +20,7 @@ class Category() : Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   var id: Long = -1
 
-  @Column(name = "name")
+  @Column(name = "name", unique = true, length = 100)
   var name: String = ""
 
   @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], orphanRemoval = true)

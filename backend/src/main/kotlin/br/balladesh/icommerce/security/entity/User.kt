@@ -2,7 +2,6 @@ package br.balladesh.icommerce.security.entity
 
 import br.balladesh.icommerce.calculateHashCode
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.io.Serializable
 import javax.persistence.*
@@ -32,14 +31,14 @@ class User() : UserDetails, Serializable {
     : this(name, username, password, authorities, -1)
 
   @Id
-  @Column(name = "id")
+  @Column(name = "id", unique = true)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   var id: Long = -1
 
   @Column(name = "name")
   var name: String = ""
 
-  @Column(name = "username")
+  @Column(name = "username", unique = true, length = 50)
   private var username: String = ""
 
   @JsonIgnore

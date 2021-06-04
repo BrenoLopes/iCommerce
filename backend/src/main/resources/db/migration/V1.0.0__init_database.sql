@@ -9,7 +9,7 @@ create table users
 (
     id       serial,
     name     varchar(255),
-    username varchar(255),
+    username varchar(50) unique,
     password varchar(255),
     enabled  boolean
 );

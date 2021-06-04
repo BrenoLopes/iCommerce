@@ -19,6 +19,7 @@ class Order() {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true)
   var id: Long = -1
 
   @ManyToOne
@@ -72,6 +73,7 @@ class Order() {
 class OrderedProduct() {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true)
   var id: Long = -1
 
   var name = ""
