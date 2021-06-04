@@ -1,6 +1,7 @@
 package br.balladesh.icommerce.ecommerce.controllers
 
 import br.balladesh.icommerce.ecommerce.dto.OrderListResponse
+import br.balladesh.icommerce.ecommerce.dto.PayOrderRequest
 import br.balladesh.icommerce.ecommerce.dto.PostOrderRequest
 import br.balladesh.icommerce.ecommerce.entity.Order
 import br.balladesh.icommerce.ecommerce.entity.OrderedProduct
@@ -53,6 +54,34 @@ class OrderController(
       logger.error("Ocorreu um erro ao postar uma ordem", e)
 
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(MessageResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro no servidor!"))
+    }
+  }
+
+  @PostMapping(value = ["/order/pay"])
+  fun payOrderMadeByClient(@RequestBody request: PayOrderRequest, user: Principal): ResponseEntity<Any> {
+    return try {
+      val currentUser = this.userService.findByUsername(user.name)
+      val order = orderRepository.findByIdAndUser(request.order_id, currentUser)
+
+      if (!order.isPresent) {
+        throw RuntimeException("Pedido não encontrado")
+      }
+
+      if (order.get().paied) {
+        return ResponseEntity.ok(MessageResponse("O pedido já está pago!"))
+      }
+
+      order.get().paied = true
+      orderRepository.save(order.get())
+
+      ResponseEntity.ok(MessageResponse("O pedido foi pago com sucesso!"))
+    } catch(e: RuntimeException) {
+      ResponseEntity.badRequest().body(MessageResponse(HttpStatus.BAD_REQUEST, "O pedido não existe!"))
+    } catch (e: Exception) {
+      logger.error("Ocorreu um erro ao listar as ordens", e)
+
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(MessageResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro no servidor!"))
     }
   }

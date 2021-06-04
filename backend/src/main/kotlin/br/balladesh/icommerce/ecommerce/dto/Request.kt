@@ -12,3 +12,7 @@ data class ProductSignUpRequest(
 data class PostOrderRequest(
   val products: Set<Long>
 )
+
+data class PayOrderRequest(
+  val order_id: Long
+)
