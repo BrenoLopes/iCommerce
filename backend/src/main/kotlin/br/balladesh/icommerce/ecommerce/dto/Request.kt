@@ -8,3 +8,7 @@ data class ProductSignUpRequest(
   val description: String,
   val price: BigDecimal
 )
+
+data class PostOrderRequest(
+  val products: Set<Long>
+)
