@@ -10,5 +10,6 @@ interface ProductRepository : CrudRepository<Product, Long> {
   fun findByName(name: String): Optional<Product>
   fun findAllByCategory(category: Category): MutableSet<Product>
   fun findAllByVendor(vendor: User): MutableSet<Product>
+  fun findAllByIdIn(idSet: Set<Long>): MutableSet<Product>
   fun deleteAllByVendor(vendor: User)
 }
