@@ -1,6 +1,7 @@
 package br.balladesh.icommerce.ecommerce.entity
 
 import br.balladesh.icommerce.security.entity.User
+import org.hibernate.annotations.JoinColumnOrFormula
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -20,6 +21,9 @@ class Order() {
 
   @Column(name = "paied")
   var paied = false
+
+  @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
+  var orderedProducts: Set<OrderedProduct> = emptySet()
 
   constructor(id: Long, user: User, totalPrice: BigDecimal, paied: Boolean): this() {
     this.id = id
@@ -50,7 +54,7 @@ class OrderedProduct() {
   var category = Category()
 
   @ManyToOne
-  @JoinColumn(name = "order_id", referencedColumnName = "id")
+  @JoinColumn(foreignKey = ForeignKey(name = "order_id"), name="order_id")
   var order = Order()
 
   constructor(id: Long, name: String, description: String, price: BigDecimal, category: Category, order: Order): this() {
