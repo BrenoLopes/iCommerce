@@ -1,0 +1,15 @@
+insert into category (id, name)
+values (1, 'Celulares'),
+       (2, 'Eletro'),
+       (3, 'Tv e Áudio'),
+       (4, 'Eletrônicos'),
+       (5, 'Esporte e lazer'),
+       (6, 'Ferramentas e Jardim'),
+       (7, 'Decoração'),
+       (8, 'Comida'),
+       (9, 'Automotivo'),
+       (10, 'Moda'),
+       (11, 'Informática'),
+       (12, 'Cama mesa e banho'),
+       (13, 'Utilidades domésticas'),
+       (14, 'Outros');
