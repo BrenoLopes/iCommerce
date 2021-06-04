@@ -1,10 +1,10 @@
 package br.balladesh.icommerce.security.entity
 
+import br.balladesh.icommerce.calculateHashCode
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.security.core.GrantedAuthority
 import java.io.Serializable
 import javax.persistence.*
-
 
 @Entity
 @Table(name="authority")
@@ -36,6 +36,23 @@ class Authority() : GrantedAuthority, Serializable {
   @JsonIgnore
   fun getName(): UserRoleName {
     return name
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Authority
+
+    if (this.id != other.id || this.name != other.name) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    return calculateHashCode(
+      this.id, this.name
+    )
   }
 
   companion object {
