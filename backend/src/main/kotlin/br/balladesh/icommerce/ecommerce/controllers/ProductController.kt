@@ -60,14 +60,11 @@ class ProductController(
   }
 
   @GetMapping(value = ["/product"])
-  @PreAuthorize("hasRole('ADMIN')")
   fun listAllProducts(user: Principal): ResponseEntity<Any> {
     return try {
-      val currentUser = this.userService.findByUsername(user.name)
+      val products = this.productRepository.findAll()
 
-      val products = this.productRepository.findAllByVendor(currentUser)
-
-      ResponseEntity.ok(ProductListResponse(products))
+      ResponseEntity.ok(ProductListResponse(products.toSet()))
     } catch (e: Exception) {
       logger.error("Ocorreu um erro ao listar os produtos", e)
 
