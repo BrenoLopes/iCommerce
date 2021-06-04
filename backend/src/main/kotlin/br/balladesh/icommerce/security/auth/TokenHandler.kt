@@ -27,10 +27,10 @@ class TokenAuthenticationFilter(
 
   private fun processToken(authToken: String) {
     val username = tokenHelper.getUsernameFromToken(authToken)
-    if (!username.isPresent) return;
+    if (!username.isPresent) return
 
     val userDetails = userDetailsService.loadUserByUsername(username.get())
-    if (!tokenHelper.validateToken(authToken, userDetails)) return;
+    if (!tokenHelper.validateToken(authToken, userDetails)) return
 
     val authentication = TokenBasedAuthentication(authToken, userDetails)
     SecurityContextHolder.getContext().authentication = authentication
