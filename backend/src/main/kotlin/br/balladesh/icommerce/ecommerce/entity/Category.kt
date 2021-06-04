@@ -23,7 +23,7 @@ class Category() : Serializable {
   @Column(name = "name", unique = true, length = 100)
   var name: String = ""
 
-  @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], orphanRemoval = true)
+  @OneToMany(mappedBy = "category", orphanRemoval = true)
   var products: MutableSet<Product> = mutableSetOf()
     private set
 
