@@ -32,7 +32,8 @@ class AuthenticationController(
   private val userDetailsService: CustomUserDetailsService,
   private val userRepository: UserRepository,
   private val authorityRepository: AuthorityRepository,
-) {
+)
+{
   @RequestMapping(value = ["/login"], method = [RequestMethod.POST])
   @Throws(AuthenticationException::class,IOException::class)
   fun createAuthenticationTokenWhenLogin(@RequestBody authenticationRequest: LoginAuthenticationRequest): ResponseEntity<JwtTokenResponse> {
@@ -68,7 +69,8 @@ class AuthenticationController(
       val authority = authorityRepository.findByName(UserRoleName.ROLE_USER)
 
       val hashedPassword = userDetailsService.hashPassword(request.password)
-      val user = User( request.name, request.username, hashedPassword, mutableListOf(authority) )
+      val user = User( request.name, request.username, hashedPassword, mutableSetOf(authority) )
+
       userRepository.save(user)
 
       ResponseEntity

@@ -14,6 +14,28 @@ enum class UserRoleName {
 @Entity
 @Table(name = "users")
 class User() : UserDetails, Serializable {
+  constructor(
+    name: String,
+    username: String,
+    password: String,
+    authorities: MutableSet<Authority>,
+    id: Long
+  ) : this() {
+    this.name = name
+    this.username = username
+    this.password = password
+    this.authorities = authorities
+    this.id = id
+  }
+
+  constructor(name: String, username: String, password: String, authorities: MutableSet<Authority>)
+    : this(name, username, password, authorities, -1)
+
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  var id: Long = -1
+
   @Column(name = "name")
   var name: String = ""
 
@@ -30,32 +52,10 @@ class User() : UserDetails, Serializable {
     joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
     inverseJoinColumns = [JoinColumn(name = "authority_id", referencedColumnName = "id")],
   )
-  private var authorities: MutableList<Authority> = mutableListOf()
+  private var authorities: MutableSet<Authority> = mutableSetOf()
 
   @Column(name = "enabled")
   private var enabled: Boolean = true
-
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  var id: Long = -1
-
-  constructor(
-    name: String,
-    username: String,
-    password: String,
-    authorities: MutableList<Authority>,
-    id: Long
-  ) : this() {
-    this.name = name
-    this.username = username
-    this.password = password
-    this.authorities = authorities
-    this.id = id
-  }
-
-  constructor(name: String, username: String, password: String, authorities: MutableList<Authority>)
-    : this(name, username, password, authorities, -1)
 
   override fun getUsername(): String = username
   fun setUsername(username: String) {
@@ -68,7 +68,7 @@ class User() : UserDetails, Serializable {
   }
 
   override fun getAuthorities(): Collection<GrantedAuthority> = authorities
-  fun setAuthorities(authorities: MutableList<Authority>) {
+  fun setAuthorities(authorities: MutableSet<Authority>) {
     this.authorities = authorities
   }
 
