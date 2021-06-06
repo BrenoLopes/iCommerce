@@ -1,11 +1,14 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 import "./Button.scss";
 
-function Button() {
+interface Props {
+  onClick: () => void;
+  isFull: boolean | undefined;
+}
+
+const Button: FunctionComponent<Props> = ({ onClick, isFull }: Props): JSX.Element => {
   return (
-    <div className="button">
-      Login
-    </div>
+    <button onClick={onClick} className={`button ${isFull ? "button-full" : ""}`}>Login</button>
   );
 }
 
