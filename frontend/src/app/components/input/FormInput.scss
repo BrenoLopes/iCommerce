@@ -1,0 +1,35 @@
+@import "src/app/variables";
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+
+  .input-label {
+    margin: 5px 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    color: $black;
+  }
+
+  .input-element {
+    background-color: $light-gray;
+    border: 1px solid $dark-gray;
+    border-radius: 3px;
+    margin: 5px 0;
+    height: 35px;
+  }
+
+  .input-error {
+    margin: 5px 0;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: red;
+  }
+
+  .border-red {
+    border: 1px solid red;
+  }
+}
