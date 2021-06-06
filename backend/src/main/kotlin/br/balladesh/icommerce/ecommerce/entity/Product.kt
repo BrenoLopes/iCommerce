@@ -1,6 +1,7 @@
 package br.balladesh.icommerce.ecommerce.entity
 
 import br.balladesh.icommerce.calculateHashCode
+import br.balladesh.icommerce.files.entity.FileEntity
 import br.balladesh.icommerce.security.entity.User
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,17 +14,18 @@ import javax.persistence.*
 @Table(name = "product")
 class Product() : Serializable
 {
-  constructor(id: Long, name: String, category: Category, description: String, price: BigDecimal, vendor: User) : this() {
+  constructor(id: Long, name: String, category: Category, description: String, image: FileEntity,  price: BigDecimal, vendor: User) : this() {
     this.id = id
     this.name = name
     this.setCategoryBidirectionally(category)
+    this.image = image
     this.description = description
     this.price = price
     this.vendor = vendor
   }
 
-  constructor(name: String, category: Category, description: String, price: BigDecimal, vendor: User)
-    : this(-1, name, category, description, price, vendor)
+  constructor(name: String, category: Category, description: String, image: FileEntity, price: BigDecimal, vendor: User)
+    : this(-1, name, category, description, image, price, vendor)
 
   @Id
   @Column(name = "id", unique = true)
@@ -55,6 +57,10 @@ class Product() : Serializable
   @ManyToOne
   @JoinColumn(name = "client_id", referencedColumnName = "id")
   var vendor: User = User()
+
+  @OneToOne(cascade = [CascadeType.ALL])
+  @JoinColumn(foreignKey = ForeignKey(name = "image_id"), name = "image_id")
+  var image: FileEntity = FileEntity()
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -89,6 +95,7 @@ class Product() : Serializable
       .put("description", description)
       .put("price", price)
       .put("vendor", vendor.name)
+      .put("image", this.image.location)
       .put("category_id", category.id)
       .put("category_name", category.name)
     return node

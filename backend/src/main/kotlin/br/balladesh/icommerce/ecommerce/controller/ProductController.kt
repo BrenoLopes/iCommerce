@@ -5,6 +5,8 @@ import br.balladesh.icommerce.ecommerce.dto.ProductSignUpRequest
 import br.balladesh.icommerce.ecommerce.entity.Product
 import br.balladesh.icommerce.ecommerce.repository.CategoryRepository
 import br.balladesh.icommerce.ecommerce.repository.ProductRepository
+import br.balladesh.icommerce.files.entity.FileEntity
+import br.balladesh.icommerce.files.repository.FileRepository
 import br.balladesh.icommerce.security.dto.MessageResponse
 import br.balladesh.icommerce.security.service.UserService
 import org.slf4j.Logger
@@ -22,24 +24,27 @@ import java.security.Principal
 class ProductController(
   private val userService: UserService,
   private val categoryRepository: CategoryRepository,
-  private val productRepository: ProductRepository
+  private val productRepository: ProductRepository,
+  private val fileRepository: FileRepository
 ) {
   val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-  @PostMapping(value = ["/product"])
+  @PostMapping(value = ["/product"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
   @PreAuthorize("hasRole('ADMIN')")
-  fun registerProduct(@RequestBody request: ProductSignUpRequest, user: Principal): ResponseEntity<MessageResponse> {
+  fun registerProduct(@ModelAttribute request: ProductSignUpRequest, user: Principal): ResponseEntity<MessageResponse> {
+    val fileLocation = fileRepository.save(request.image.bytes, request.image.originalFilename)
+
     try {
       val currentUser = this.userService.findByUsername(user.name)
 
       val category = this.categoryRepository.findById(request.category_id)
-
       if (!category.isPresent) {
         return ResponseEntity.badRequest()
           .body(MessageResponse(HttpStatus.BAD_REQUEST.value(), "A categoria informada não existe!"))
       }
 
-      val product = Product(request.name, category.get(), request.description, request.price, currentUser)
+      val image = FileEntity(fileLocation)
+      val product = Product(request.name, category.get(), request.description, image, request.price, currentUser)
 
       this.productRepository.save(product)
 
@@ -48,11 +53,15 @@ class ProductController(
       val message = String.format("Um produto com o nome %s já existe!", request.name)
       val status = HttpStatus.CONFLICT
 
+      fileRepository.deleteByLocation(fileLocation.privatePath)
+
       return ResponseEntity
         .status(status)
         .body(MessageResponse(status, message))
     } catch (e: Exception) {
       logger.error("Ocorreu um erro ao cadastrar um produto", e)
+
+      fileRepository.deleteByLocation(fileLocation.privatePath)
 
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(MessageResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro no servidor!"))
