@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Checkbox.scss"
 
@@ -22,7 +21,7 @@ const CheckboxInput: React.FC<Props> = (props: Props) => {
   return (
     <div className="checkbox-container" onClick={onClick} role="button">
       <div className={`checkbox ${state.checked ? "checkbox-checked" : ""}`}>
-        <FontAwesomeIcon icon={["fas", "check"]}/>
+        <i className="fas fa-check" />
       </div>
       <p className="label">{props.label}</p>
     </div>

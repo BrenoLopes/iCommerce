@@ -15,7 +15,7 @@
     border: 1px solid $dark-gray;
     background-color: $middle-gray;
 
-    svg {
+    i {
       display: none;
     }
   }
@@ -24,7 +24,7 @@
     border: 1px solid transparent;
     background-color: $primary-color;
 
-    svg {
+    i {
       display: inline-block;
       color: white;
     }
