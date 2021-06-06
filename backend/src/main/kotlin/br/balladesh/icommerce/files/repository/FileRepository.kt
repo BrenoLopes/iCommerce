@@ -1,6 +1,7 @@
 package br.balladesh.icommerce.files.repository
 
 import br.balladesh.icommerce.files.dto.SavedFile
+import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.core.io.FileSystemResource
 import org.springframework.stereotype.Repository
@@ -14,11 +15,12 @@ import kotlin.io.path.notExists
 class FileRepository {
   private val imagesDirectory = Paths.get("./images")
 
-  fun save(bytes: ByteArray, extension: String?): SavedFile {
+  fun save(bytes: ByteArray, fileName: String?): SavedFile {
     if (imagesDirectory.notExists()) {
       imagesDirectory.createDirectories()
     }
 
+    val extension = FilenameUtils.getExtension(fileName) ?: ".jpg"
     val newFileName = String.format("%s.%s", RandomStringUtils.randomAlphanumeric(40), extension)
 
 //    val newFilePath: String = StringBuilder()
