@@ -1,12 +1,15 @@
 import React from 'react';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+
 import './App.scss';
 
-import Button from './components/button/Button';
-
 function App() {
+  library.add(faCheck);
+
   return (
     <div>
-      <Button />
+
     </div>
   );
 }
