@@ -1,4 +1,4 @@
-package br.balladesh.icommerce.ecommerce.controllers
+package br.balladesh.icommerce.ecommerce.controller
 
 import br.balladesh.icommerce.ecommerce.dto.OrderListResponse
 import br.balladesh.icommerce.ecommerce.dto.PayOrderRequest

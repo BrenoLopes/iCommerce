@@ -1,4 +1,4 @@
-package br.balladesh.icommerce.ecommerce.controllers
+package br.balladesh.icommerce.ecommerce.controller
 
 import br.balladesh.icommerce.ecommerce.dto.ProductListResponse
 import br.balladesh.icommerce.ecommerce.dto.ProductSignUpRequest
