@@ -1,5 +1,6 @@
 package br.balladesh.icommerce.security
 
+import br.balladesh.icommerce.security.repository.UserRepository
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import io.jsonwebtoken.ExpiredJwtException
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -40,10 +43,14 @@ class TokenHelper(
     return Optional.ofNullable(claims.get().issuedAt)
   }
 
-  fun refreshToken(token: String): Optional<String> {
+  fun refreshToken(token: String, userRepository: UserRepository): Optional<String> {
     try {
       val claims = this.getAllClaimsFromToken(token, true)
       if (!claims.isPresent) return Optional.empty()
+
+      val user = userRepository.findByUsername(claims.get().subject)
+      if (!user.isPresent)
+        throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
       claims.get().issuedAt = Date()
 

@@ -91,10 +91,10 @@ class AuthenticationController(
     val authToken = tokenHelper.getToken(request)
 
     if (!authToken.isPresent) {
-      return ResponseEntity.accepted().body(JwtTokenResponse())
+      return ResponseEntity.badRequest().body(JwtTokenResponse())
     }
 
-    val refreshedToken = tokenHelper.refreshToken(authToken.get()).orElse("")
+    val refreshedToken = tokenHelper.refreshToken(authToken.get(), userRepository).orElse("")
     val expiresIn = tokenHelper.getExpiredTime()
 
     return ResponseEntity.ok(JwtTokenResponse(refreshedToken, expiresIn.toLong()))
