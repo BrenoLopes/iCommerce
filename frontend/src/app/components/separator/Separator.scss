@@ -1,0 +1,25 @@
+@import "src/app/variables";
+
+.separator-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .separator {
+    height: 1px;
+    flex: 1 0 auto;
+    background-color: $dark-gray;
+    margin: 12px 0;
+  }
+  .label {
+    margin: 0 20px;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    font-weight: 400;
+
+    &.hide {
+      display: none;
+    }
+  }
+}
