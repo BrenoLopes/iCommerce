@@ -1,0 +1,16 @@
+@import "src/app/variables";
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  background-color: $primary-key;
+  color: $white;
+  border-radius: 3px;
+  padding: 5px 80px;
+  margin: 15px 0;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 1.2px;
+}
