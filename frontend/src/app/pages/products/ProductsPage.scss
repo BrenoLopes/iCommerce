@@ -1,0 +1,10 @@
+.product-catalog-container {
+  height: 100%;
+
+  .products-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 0 auto;
+    justify-content: space-evenly;
+  }
+}
