@@ -12,8 +12,9 @@ import ButtonComponent from "app/components/button/ButtonComponent";
 import SeparatorComponent from "app/components/separator/SeparatorComponent";
 
 import "./LoginPage.scss";
-import Network from "../../networking/url";
+import { getFullUrl } from "../../networking/url";
 import { LoginRequest, LoginResponse } from "./types";
+import axios from "axios";
 
 const LoginPage: react.FC = () => {
   const [username, setUsername] = useState({
@@ -30,10 +31,10 @@ const LoginPage: react.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (localStorage.getItem('token') === null) return
+    if (localStorage.getItem("token") === null) return;
 
-    history.push("/produtos")
-  }, [])
+    history.push("/produtos");
+  }, []);
 
   useEffect(() => {
     if (username.isValid && userPasswordData.isValid) setIsFormDisabled(false);
@@ -47,8 +48,8 @@ const LoginPage: react.FC = () => {
     };
 
     try {
-      const result = await new Network<LoginResponse>(false).post(
-        "/auth/login",
+      const result = await axios.post<LoginResponse>(
+        getFullUrl("/auth/login"),
         loginData,
         {
           headers: { "Content-Type": "application/json" },
@@ -58,7 +59,9 @@ const LoginPage: react.FC = () => {
       localStorage.setItem("token", result.data.access_token);
 
       history.push("/produtos");
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onSignUp = () => {
