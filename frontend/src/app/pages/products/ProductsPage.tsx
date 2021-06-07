@@ -4,70 +4,63 @@ import NavigationComponent from "../../components/navigation/NavigationComponent
 
 import './ProductsPage.scss'
 import ProductThumbnailComponent from "../../components/productthumbnail/ProductThumbnailComponent";
-
-interface Product {
-  imageUrl: string
-  productName: string
-  productPrice: number
-}
+import Network, {getFullUrl} from "../../networking/url";
+import {Product, ProductResponse} from "./types";
+import axios from "axios";
 
 const ProductsPage: react.FC = () => {
   const [thumbnails, setThumbnails] = useState<JSX.Element[]>([])
   const products = new Map<number, Product>()
 
+  const history = useHistory()
+
   useEffect(() => {
-    products.set(1, {
-      imageUrl: "https://a-static.mlcdn.com.br/618x463/creme-de-leite-integral-piracanjuba-200g/magazineluiza/226146500/4785e4a4398f4f80755372eb3111d32b.jpg",
-      productName: "Creme de Leite Integral Piracanjuba 200g",
-      productPrice: 3.59
-    })
-    products.set(2, {
-      imageUrl: "https://a-static.mlcdn.com.br/618x463/creme-de-leite-integral-piracanjuba-200g/magazineluiza/226146500/4785e4a4398f4f80755372eb3111d32b.jpg",
-      productName: "Creme de Leite Integral Piracanjuba 200g",
-      productPrice: 3.59
-    })
-    products.set(3, {
-      imageUrl: "https://a-static.mlcdn.com.br/618x463/creme-de-leite-integral-piracanjuba-200g/magazineluiza/226146500/4785e4a4398f4f80755372eb3111d32b.jpg",
-      productName: "Creme de Leite Integral Piracanjuba 200g",
-      productPrice: 3.59
-    })
-    products.set(4, {
-      imageUrl: "https://a-static.mlcdn.com.br/618x463/creme-de-leite-integral-piracanjuba-200g/magazineluiza/226146500/4785e4a4398f4f80755372eb3111d32b.jpg",
-      productName: "Creme de Leite Integral Piracanjuba 200g",
-      productPrice: 3.59
-    })
-    products.set(5, {
-      imageUrl: "https://a-static.mlcdn.com.br/618x463/creme-de-leite-integral-piracanjuba-200g/magazineluiza/226146500/4785e4a4398f4f80755372eb3111d32b.jpg",
-      productName: "Creme de Leite Integral Piracanjuba 200g",
-      productPrice: 3.59
-    })
-    products.set(6, {
-      imageUrl: "https://a-static.mlcdn.com.br/618x463/creme-de-leite-integral-piracanjuba-200g/magazineluiza/226146500/4785e4a4398f4f80755372eb3111d32b.jpg",
-      productName: "Creme de Leite Integral Piracanjuba 200g",
-      productPrice: 3.59
-    })
+    loadProducts().then()
+  }, [])
 
-    const buffer: JSX.Element[] = []
+  const loadProducts = async () => {
+    try {
+      const token = localStorage.getItem('token')
 
-    products.forEach((p, id) => {
-      buffer.push(
-        <ProductThumbnailComponent
-          imageUrl={p.imageUrl}
-          productName={p.productName}
-          productPrice={p.productPrice}
-          onClick={() => navigateToProduct(id)}
-        />
-      )
-    })
+      const { data } = await axios.get<ProductResponse>(getFullUrl('/api/product'), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
 
-    setThumbnails(buffer)
-  }, [products])
+      data.products.forEach(p => {
+        products.set(p.id, p)
+      })
+
+      const buffer: JSX.Element[] = []
+      products.forEach((p) => {
+        buffer.push(
+          <ProductThumbnailComponent
+            imageUrl={getFullUrl(p.image)}
+            productName={p.name}
+            productPrice={p.price}
+            onClick={() => navigateToProduct(p.id)}
+            key={p.id}
+          />
+        )
+      })
+
+      setThumbnails(buffer)
+    } catch (e) {
+      localStorage.removeItem('token')
+      console.log(e)
+      history.push("/")
+      // localStorage.removeItem('token')
+      // history.push('/')
+    }
+  }
 
   const navigateToProduct: (id: number) => void = (id) => {
     const product = products.get(id)
 
     if (product)
-      console.log("Navegando para ", product.productName, "with price ", product.productPrice);
+      console.log("Navegando para ", product.name, "with price ", product.price);
   }
 
   return (
