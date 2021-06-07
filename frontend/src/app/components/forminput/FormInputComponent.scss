@@ -14,10 +14,11 @@
   }
 
   .input-element {
+    margin: 5px 0;
+    padding: 0 10px;
     background-color: $light-gray;
     border: 1px solid $dark-gray;
     border-radius: 3px;
-    margin: 5px 0;
     height: 35px;
   }
 
