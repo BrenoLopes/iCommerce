@@ -85,7 +85,8 @@ class WebSecurityConfiguration(
       HttpMethod.POST,
       "/auth/login",
       "/auth/signup",
-      "/auth/refresh"
+      "/auth/refresh",
+      "/api/image/**"
     )
     web.ignoring().antMatchers(
       HttpMethod.GET,
@@ -95,7 +96,8 @@ class WebSecurityConfiguration(
       "/favicon.ico",
       "/**/*.html",
       "/**/*.css",
-      "/**/*.js"
+      "/**/*.js",
+      "/api/image/**"
     )
   }
 }
