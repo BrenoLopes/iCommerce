@@ -1,3 +1,21 @@
+export const validateEmptyInput: () => InputPredicate = () => {
+  return {
+    message: "Não pode estar vazio",
+    test: (input) => {
+      return input === ""
+    }
+  }
+}
+
+export const validateCharLength: (length: number) => InputPredicate = (length) => {
+  return {
+    message: `Não pode ter mais que ${length} caracteres`,
+    test: (input) => {
+      return input.length >= length
+    }
+  }
+}
+
 export const validatePredicates: (p: InputPredicate[], t: string) => ValidationResult = (predicates, text) => {
   let isValid = true
 
