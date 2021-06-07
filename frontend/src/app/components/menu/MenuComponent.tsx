@@ -4,9 +4,13 @@ import "./MenuComponent.scss"
 import React from "react";
 import SeparatorComponent from "../separator/SeparatorComponent";
 
-const MenuComponent: react.FC = () => {
+interface MenuComponentProps {
+  show?: boolean
+}
+
+const MenuComponent: react.FC<MenuComponentProps> = (props) => {
   return (
-    <div className="menu-container menu-hide">
+    <div className={`menu-container ${props.show ? "" : "menu-hide"}`}>
       <div className="menu-user-container">
         <div className="menu-user-img">
           <i className="fas fa-user-alt" />
