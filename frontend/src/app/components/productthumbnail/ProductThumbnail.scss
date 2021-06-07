@@ -1,0 +1,54 @@
+@import 'src/app/variables';
+
+.product-thumbnail {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $middle-gray;
+  margin: 10px;
+  width: 224px;
+  cursor: pointer;
+  transition: box-shadow .3s ease;
+
+  &:hover {
+    box-shadow: 1px 1px 8px rgba($black, .15);
+  }
+
+  .product-image {
+    width: 224px;
+    height: 224px;
+
+    img {
+      width: auto;
+      max-width: 99%;
+      height: 100%;
+      max-height: 99%;
+    }
+  }
+  .product-info {
+    padding: 10px 10px 20px 10px;
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 200;
+      letter-spacing: 0.5px;
+      line-height: 24px;
+    }
+
+    .product-price {
+      p {
+        font-size: 16px;
+        font-weight: 200;
+        line-height: 24px;
+        letter-spacing: 0.5px;
+        margin: 10px 0;
+      }
+
+      h1 {
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+}
