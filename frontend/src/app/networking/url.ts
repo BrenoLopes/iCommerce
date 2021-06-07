@@ -13,20 +13,16 @@ export default class Network<T> {
     this.refreshToken.bind(this)
   }
 
-  private urlPrefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ""
-
   async get(url: string, config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     const result = async () => {
-      const newUrl = `${this.urlPrefix}${url}`
-      return await axios.get<T>(newUrl, config)
+      return await axios.get<T>(getFullUrl(url), config)
     }
     return await this.startFunction(result)
   }
 
   async post<U>(url: string, data: U, config?: AxiosRequestConfig | undefined): Promise<AxiosResponse<T>> {
     const result = async () => {
-      const newUrl = `${this.urlPrefix}${url}`
-      return await axios.post<T>(newUrl, data, config)
+      return await axios.post<T>(getFullUrl(url), data, config)
     }
     return await this.startFunction(result)
   }
@@ -57,4 +53,9 @@ export default class Network<T> {
 
     localStorage.setItem('token', result.data.access_token)
   }
+}
+
+export const getFullUrl: (url: string) => string = (url) => {
+  const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ""
+  return `${prefix}${url}`
 }
