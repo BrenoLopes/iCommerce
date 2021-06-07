@@ -1,0 +1,118 @@
+@import "src/app/variables";
+
+#root {
+  position: relative;
+}
+
+.menu-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: $black-gray;
+  transition: left .5s ease;
+
+  &.menu-hide {
+    left: -100%;
+  }
+
+  @media (min-width: 550px) {
+    width: 414px;
+
+    &.menu-hide {
+      left: -414px;
+    }
+  }
+
+  .menu-user-container {
+    display: flex;
+    margin: 20px 0;
+    padding: 5px 20px;
+    align-items: center;
+
+    .menu-user-img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background-color: $white;
+
+      i {
+        font-size: 25px;
+      }
+    }
+
+    .menu-user-name {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      flex: 1 0 auto;
+      margin: 0 0 0 20px;
+      color: $white;
+    }
+  }
+
+  .menu-categories-container {
+    margin: 0px 20px 0px 62px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1 0 0;
+
+    .menu-categories-item {
+      font-size: 20px;
+      font-weight: 300;
+      color: $light-gray;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      //margin-bottom: 20px;
+      padding: 15px 0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: lighten($black-gray, 5);
+      }
+    }
+  }
+
+  .menu-item-container {
+    display: flex;
+    padding: 25px 20px;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: lighten($black-gray, 5);
+    }
+    &.menu-item-container-div:hover {
+      background-color: transparent;
+      cursor: auto;
+    }
+
+    .menu-icon {
+      margin-right: 20px;
+
+      &.menu-icon-secondary i {
+        color: $secondary-color;
+      }
+
+      i {
+        font-size: 25px;
+        color: $light-gray;
+      }
+    }
+    .menu-item-info {
+      font-size: 20px;
+      font-weight: normal;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      color: white;
+    }
+  }
+}
