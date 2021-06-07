@@ -9,13 +9,11 @@ import ButtonComponent from "app/components/button/ButtonComponent";
 import SeparatorComponent from "app/components/separator/SeparatorComponent";
 
 import "./LoginPage.scss"
+import Network from "../../networking/url";
+import {LoginRequest, LoginResponse} from "./types";
 
-interface LoginPageProps {
-
-}
-
-const LoginPage : react.FC<LoginPageProps> = () => {
-  const [userInputData, setUserInputData] = useState({
+const LoginPage : react.FC = () => {
+  const [username, setUsername] = useState({
     user: "",
     isValid: false
   })
@@ -27,16 +25,31 @@ const LoginPage : react.FC<LoginPageProps> = () => {
   const [isFormDisabled, setIsFormDisabled] = useState(true)
 
   useEffect(() => {
-    if (userInputData.isValid && userPasswordData.isValid)
+    if (username.isValid && userPasswordData.isValid)
       setIsFormDisabled(false)
     else
       setIsFormDisabled(true)
-  }, [userInputData, userPasswordData])
+  }, [username, userPasswordData])
 
   const history = useHistory()
 
-  const onLogin = () => {
+  const onLogin = async () => {
+    const loginData: LoginRequest = {
+      username: username.user,
+      password: userPasswordData.user
+    }
 
+    try {
+      const result = await new Network<LoginResponse>(false).post("/auth/login", loginData, {
+        headers: {'Content-Type': 'application/json'}
+      })
+
+      localStorage.setItem('token', result.data.access_token)
+
+      history.push("/produtos")
+    } catch (e) {
+
+    }
   }
 
   const onSignUp = () => {
@@ -53,7 +66,7 @@ const LoginPage : react.FC<LoginPageProps> = () => {
         <FormInputComponent
           label="Usuário"
           validators={[validateEmptyInput(), validateCharLength(50)]}
-          onChange={(text, isValid) => setUserInputData({
+          onChange={(text, isValid) => setUsername({
             user: text,
             isValid
           })}
