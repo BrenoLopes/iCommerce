@@ -10,6 +10,10 @@
     flex: 1 0 auto;
     background-color: $dark-gray;
     margin: 12px 0;
+
+    &.separator-light {
+      background-color: $light-gray;
+    }
   }
   .label {
     margin: 0 20px;

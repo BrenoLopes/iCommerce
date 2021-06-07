@@ -3,15 +3,18 @@ import react from "react";
 import './SeparatorComponent.scss'
 
 interface Props {
-  label: string
+  label: string,
+  color: "dark" | "light",
 }
 
-const SeparatorComponent: react.FC<Props> = ( {label} ) => {
+const SeparatorComponent: react.FC<Props> = ( {label, color} ) => {
+  const separatorClass = `separator ${color === "dark" ? "" : "separator-light"}`;
+
   return (
     <div className="separator-container">
-      <div className="separator" />
+      <div className={separatorClass} />
       <div className={`label ${label === "" ? "hide" : ""}`}>{label}</div>
-      <div className="separator" />
+      <div className={separatorClass} />
     </div>
   )
 }

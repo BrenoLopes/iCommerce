@@ -22,7 +22,7 @@ const ProductThumbnailComponent: react.FC<Props> = (props: Props) => {
           alt="what"
         />
       </div>
-      <SeparatorComponent label="" />
+      <SeparatorComponent label="" color="dark" />
       <div className="product-info">
         <div className="product-name">
           {props.productName}
