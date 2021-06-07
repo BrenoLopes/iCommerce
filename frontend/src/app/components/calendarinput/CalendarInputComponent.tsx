@@ -6,7 +6,7 @@ import {useDateInput} from "@use-date-input/core"
 // @ts-ignore
 import {adapter as dateAdapter} from '@use-date-input/date-fns-adapter'
 
-import "./CalendarInput.scss"
+import "./CalendarInputComponent.scss"
 
 interface Props {
   label: string,
@@ -20,7 +20,7 @@ interface TextInputState {
   value: string
 }
 
-const CalendarInput: React.FC<Props> = (props: Props) => {
+const CalendarInputComponent: React.FC<Props> = (props: Props) => {
   const defaultParseDate = (value: string) => parse(value, 'dd/MM/yyyy', new Date())
   const actions = useRef()
 
@@ -94,4 +94,4 @@ const CalendarInput: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default CalendarInput
+export default CalendarInputComponent

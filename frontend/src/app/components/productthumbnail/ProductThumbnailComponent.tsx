@@ -1,7 +1,7 @@
 import react from 'react';
-import SeparatorComponent from "../separator/Separator";
+import SeparatorComponent from "../separator/SeparatorComponent";
 
-import "./ProductThumbnail.scss"
+import "./ProductThumbnailComponent.scss"
 import {transformPriceIntoString} from "../transformers";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   onClick: () => void,
 }
 
-const ProductThumbnail: react.FC<Props> = (props: Props) => {
+const ProductThumbnailComponent: react.FC<Props> = (props: Props) => {
   const price = transformPriceIntoString(props.productPrice)
 
   return (
@@ -36,4 +36,4 @@ const ProductThumbnail: react.FC<Props> = (props: Props) => {
   )
 }
 
-export default ProductThumbnail
+export default ProductThumbnailComponent

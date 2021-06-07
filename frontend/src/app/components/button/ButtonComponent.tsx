@@ -1,5 +1,5 @@
 import React, {FunctionComponent} from "react";
-import "./Button.scss";
+import "./ButtonComponent.scss";
 
 type Color = "primary" | "secondary" | "default"
 
@@ -10,7 +10,7 @@ interface Props {
   color: Color
 }
 
-const Button: FunctionComponent<Props> = (props: Props): JSX.Element => {
+const ButtonComponent: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   const buttonFull = props.isFull ? "btn-full" : ""
   const colorCss = loadCssColor(props.color)
@@ -37,4 +37,4 @@ const loadCssColor = (color: Color) => {
   }
 }
 
-export default Button
+export default ButtonComponent

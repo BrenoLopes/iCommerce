@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "./Checkbox.scss"
+import "./CheckboxComponent.scss"
 
 interface Props {
   default: boolean,

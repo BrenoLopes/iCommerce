@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {validatePredicates} from "../validators";
 
-import "./FormInput.scss";
+import "./FormInputComponent.scss";
 
 interface Props {
   label: string,
@@ -15,7 +15,7 @@ interface TextInputState {
   value: string
 }
 
-const FormInput: React.FC<Props> = (props: Props) => {
+const FormInputComponent: React.FC<Props> = (props: Props) => {
   const [state, setState] = useState<TextInputState>({
     errorMessages: [],
     value: ""
@@ -56,4 +56,4 @@ const FormInput: React.FC<Props> = (props: Props) => {
   );
 }
 
-export default FormInput;
+export default FormInputComponent;

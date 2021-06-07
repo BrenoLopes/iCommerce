@@ -1,6 +1,6 @@
 import react from "react";
 
-import './Separator.scss'
+import './SeparatorComponent.scss'
 
 interface Props {
   label: string
