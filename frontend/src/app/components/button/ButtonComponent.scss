@@ -9,18 +9,22 @@
   color: $black;
   border: 0 solid transparent;
   border-radius: 3px;
-  padding: 22px 80px;
+  padding: 20px 80px;
   margin: 15px 0;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 16px;
   letter-spacing: 1.2px;
   cursor: pointer;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: darken($middle-gray, 5);
   }
-  &:focus {
+  &:focus:not(:disabled) {
     box-shadow: 0 0 0 0.2rem rgba($dark-gray,.8);
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: rgba($middle-gray, .4);
   }
 
   &.btn-full {
@@ -31,12 +35,14 @@
     background-color: $primary-color;
     color: $white;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: lighten($primary-color, 5);
     }
-
-    &:focus {
+    &:focus:not(:disabled) {
       box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+    }
+    &:disabled {
+      background-color: rgba($primary-color, .7);
     }
   }
 }

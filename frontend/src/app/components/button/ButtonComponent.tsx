@@ -4,10 +4,11 @@ import "./ButtonComponent.scss";
 type Color = "primary" | "secondary" | "default"
 
 interface Props {
-  onClick: () => void;
-  isFull: boolean;
-  label: string;
-  color: Color
+  onClick: () => void,
+  isFull: boolean,
+  label: string,
+  color: Color,
+  isDisabled: boolean
 }
 
 const ButtonComponent: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -20,6 +21,7 @@ const ButtonComponent: FunctionComponent<Props> = (props: Props): JSX.Element =>
       type="button"
       onClick={props.onClick}
       className={`btn ${buttonFull} ${colorCss}`}
+      disabled={props.isDisabled}
     >
       {props.label}
     </button>
