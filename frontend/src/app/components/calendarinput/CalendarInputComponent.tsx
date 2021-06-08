@@ -12,7 +12,6 @@ interface Props {
   label: string,
   validators: InputPredicate[],
   onChange: (text: string, isValid: boolean) => void,
-  type: FormInputType,
 }
 
 interface TextInputState {
@@ -37,6 +36,9 @@ const CalendarInputComponent: React.FC<Props> = (props: Props) => {
     setDate(dateAPI.format(newSelectedDate, 'dd/MM/yyyy'))
 
     setShowCalendarPicker(false)
+
+    const result = validatePredicates(props.validators, date)
+    props.onChange(date, result.isValid)
   }
 
   const inputClassName: string
@@ -52,10 +54,21 @@ const CalendarInputComponent: React.FC<Props> = (props: Props) => {
   }
 
   const checkValidity = (text: string) => {
-    const result = validatePredicates(props.validators, text)
+    // const result = validatePredicates(props.validators, text)
 
-    props.onChange(text, result.isValid)
-    setState({value: text, errorMessages: result.errorMessages})
+    const fn = () => {
+      if (Number.isNaN(new Date(text).getFullYear())) return false
+
+      const years = new Date().getFullYear() - new Date(text).getFullYear()
+      return years >= 18;
+    }
+
+    const result = fn()
+    if (!result)
+      setState({value: text, errorMessages: ["Você deve ter mais que 18 anos"]})
+    else
+      setState({value: text, errorMessages: []})
+    props.onChange(text, result)
   }
 
   const {
