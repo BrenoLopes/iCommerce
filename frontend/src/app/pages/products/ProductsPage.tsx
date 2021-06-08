@@ -49,7 +49,6 @@ const ProductsPage: react.FC = () => {
       setThumbnails(buffer)
     } catch (e) {
       localStorage.removeItem('token')
-      console.log(e)
       history.push("/")
       // localStorage.removeItem('token')
       // history.push('/')
