@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import br.balladesh.icommerce.security.repository.UserRepository
+import org.springframework.context.annotation.Lazy
 
 interface UserService {
   fun findById(id: Long): User
@@ -46,11 +47,12 @@ class UserServiceImpl(
   }
 }
 
+@Lazy
 @Service
 class CustomUserDetailsService(
   private val userRepository: UserRepository,
   private val passwordEncoder: PasswordEncoder,
-  private val authenticationManager: AuthenticationManager,
+  private val authenticationManager: AuthenticationManager? = null,
   private val userServiceImpl: UserServiceImpl
 ) : UserDetailsService {
 
@@ -62,7 +64,7 @@ class CustomUserDetailsService(
     val currentUser = SecurityContextHolder.getContext().authentication
     val username = currentUser.name
 
-    authenticationManager.authenticate(
+    authenticationManager?.authenticate(
       UsernamePasswordAuthenticationToken(username, oldPassword)
     )
     val user = loadUserByUsername(username) as User
