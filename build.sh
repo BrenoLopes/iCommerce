@@ -13,4 +13,4 @@ fi
 mv build/* ../backend/src/main/resources/public/
 cd ../backend
 mvn package -DskipTests
-mv ./target/iCommerce-0.0.1-SNAPSHOT.jar ../../app.jar
+mv ./target/iCommerce-0.0.1-SNAPSHOT.jar ../app.jar
